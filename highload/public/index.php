@@ -3,15 +3,6 @@
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
-//function req()
-//{
-//    echo 1;
-//    req();
-//}
-//
-//req();
-
-
 define('LARAVEL_START', microtime(true));
 
 /*

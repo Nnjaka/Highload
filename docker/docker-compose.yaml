@@ -21,7 +21,11 @@ services:
             depends_on:
                 - redis
                 - memcached
-                - mariadb
+                - mariadb-master
+                - mariadb-slave-1
+                - mariadb-slave-2
+                - mariadb-slave-3
+                - mariadb-slave-4
 
         nginx:
             container_name: nginx
@@ -62,15 +66,97 @@ services:
             networks:
                 - highload-network
 
-        mariadb:
-            container_name: mariadb
+        mariadb-master:
+            container_name: mariadb-master
             image: mariadb:latest
             env_file:
-                - ./db/master/.env.master
+                - ./maria/master/.env.master
             ports:
                 - "3307:3306"
             volumes:
-                - ./db/master/.data/mysql:/var/lib/mysql:rw
+                - ./maria/master/master.sql:/docker-entrypoint-initdb.d/start.sql
+                - ./maria/master/mysql.master.cnf:/etc/mysql/conf.d/mysql.master.cnf
+                - ./maria/master/.data/mysql:/var/lib/mysql:rw
+            networks:
+                - highload-network
+
+        mariadb-shard-1:
+            container_name: mariadb_shard_1
+            image: mariadb:latest
+            env_file:
+                - ./maria/master/.env.master
+            ports:
+                - "3312:3306"
+            volumes:
+                - ./maria/master/.data/mysql:/var/lib/mysql:rw
+            networks:
+                - highload-network
+
+        mariadb-shard-2:
+            container_name: mariadb_shard_2
+            image: mariadb:latest
+            env_file:
+                - ./maria/master/.env.master
+            ports:
+                - "3313:3306"
+            volumes:
+                - ./maria/master/.data/mysql:/var/lib/mysql:rw
+            networks:
+                - highload-network
+
+        mariadb-slave-1:
+            container_name: mariadb_slave_1
+            image: mariadb:latest
+            env_file:
+                - ./maria/slaves/slave_1/.env.slave
+            ports:
+                - "3308:3306"
+            volumes:
+                - ./maria/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
+                - ./maria/slaves/slave_1/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
+                - ./maria/slaves/slave_1/.data/mysql:/var/lib/mysql:rw
+            networks:
+                - highload-network
+
+        mariadb-slave-2:
+            container_name: mariadb_slave_2
+            image: mariadb:latest
+            env_file:
+                - ./maria/slaves/slave_2/.env.slave
+            ports:
+                - "3309:3306"
+            volumes:
+                - ./maria/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
+                - ./maria/slaves/slave_2/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
+                - ./maria/slaves/slave_2/.data/mysql:/var/lib/mysql:rw
+            networks:
+                - highload-network
+
+        mariadb-slave-3:
+            container_name: mariadb_slave_3
+            image: mariadb:latest
+            env_file:
+                - ./maria/slaves/slave_3/.env.slave
+            ports:
+                - "3310:3306"
+            volumes:
+                - ./maria/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
+                - ./maria/slaves/slave_3/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
+                - ./maria/slaves/slave_3/.data/mysql:/var/lib/mysql:rw
+            networks:
+                - highload-network
+
+        mariadb-slave-4:
+            container_name: mariadb_slave_4
+            image: mariadb:latest
+            env_file:
+                - ./maria/slaves/slave_4/.env.slave
+            ports:
+                - "3311:3306"
+            volumes:
+                - ./maria/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
+                - ./maria/slaves/slave_4/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
+                - ./maria/slaves/slave_4/.data/mysql:/var/lib/mysql:rw
             networks:
                 - highload-network
 

@@ -22,3 +22,6 @@ Route::get('/', function () {
 Route::get('/quick_sort', [QuickSortController::class, 'list'])->name('quick_sort');
 
 Route::get('/bubble_sort', [BubbleSortController::class, 'list'])->name('bubble_sort');
+
+Route::get('/add_order', [\App\Http\Controllers\OrderStorageController::class, 'insertValueToShard'])
+    ->name('add_order');

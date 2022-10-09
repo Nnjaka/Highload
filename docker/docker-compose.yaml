@@ -72,7 +72,7 @@ services:
             env_file:
                 - ./maria/master/.env.master
             ports:
-                - "3307:3306"
+                - "3314:3306"
             volumes:
                 - ./maria/master/master.sql:/docker-entrypoint-initdb.d/start.sql
                 - ./maria/master/mysql.master.cnf:/etc/mysql/conf.d/mysql.master.cnf

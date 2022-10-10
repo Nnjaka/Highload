@@ -2,6 +2,23 @@
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
+use App\Services\Rabbit\RabbitPublisherService;
+
+//require_once 'MemcashedService.php';
+//require_once 'RedisService.php';
+//
+//echo 'Это Memcashed';
+//$memcashedService = new MemcashedService();
+//$memcashedService->getCashe();
+//
+//echo '<br>';
+//echo 'Это Redis';
+//$redisService = new RedisService();
+//$redisService->getCashe();
+
+
+
+
 
 define('LARAVEL_START', microtime(true));
 

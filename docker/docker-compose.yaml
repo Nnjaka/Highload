@@ -72,34 +72,10 @@ services:
             env_file:
                 - ./maria/master/.env.master
             ports:
-                - "3307:3306"
+                - "3314:3306"
             volumes:
                 - ./maria/master/master.sql:/docker-entrypoint-initdb.d/start.sql
                 - ./maria/master/mysql.master.cnf:/etc/mysql/conf.d/mysql.master.cnf
-                - ./maria/master/.data/mysql:/var/lib/mysql:rw
-            networks:
-                - highload-network
-
-        mariadb-shard-1:
-            container_name: mariadb_shard_1
-            image: mariadb:latest
-            env_file:
-                - ./maria/master/.env.master
-            ports:
-                - "3312:3306"
-            volumes:
-                - ./maria/master/.data/mysql:/var/lib/mysql:rw
-            networks:
-                - highload-network
-
-        mariadb-shard-2:
-            container_name: mariadb_shard_2
-            image: mariadb:latest
-            env_file:
-                - ./maria/master/.env.master
-            ports:
-                - "3313:3306"
-            volumes:
                 - ./maria/master/.data/mysql:/var/lib/mysql:rw
             networks:
                 - highload-network
@@ -157,6 +133,19 @@ services:
                 - ./maria/slaves/slave.sql:/docker-entrypoint-initdb.d/start.sql
                 - ./maria/slaves/slave_4/mysql.slave.cnf:/etc/mysql/conf.d/mysql.slave.cnf
                 - ./maria/slaves/slave_4/.data/mysql:/var/lib/mysql:rw
+            networks:
+                - highload-network
+
+
+        rabbitMQ:
+            container_name: rabbitMQ
+            image: rabbitmq:3.8-management-alpine
+            ports:
+                - "5672:5672"
+                - "15672:15672"
+            volumes:
+                - ./rabbitMQ/data/:/var/lib/rabbitmq/
+                - ./rabbitMQ/log/:/var/log/rabbit:rw
             networks:
                 - highload-network
 
